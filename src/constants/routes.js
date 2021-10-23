@@ -1,0 +1,13 @@
+export const DASHBOARD = '/';
+export const LOGIN = '/login';
+export const SIGN_UP = '/sign-up';
+export const PROFILE = '/user/:username';
+export const MATERIAL = '/material/:title';
+export const NOT_FOUND = '/not-found';
+export const MESSAGES = '/messages';
+export const NEWPOST = '/newpost';
+export const BOOKSHELL = '/bookshell';
+export const MYMATERIAL = '/bookshell/mymaterial';
+export const PURSMATERIAL = '/bookshell/pursmaterial';
+export const SEARCHRESULT = '/search-result';
+export const REQUEST = '/request-your-book';
