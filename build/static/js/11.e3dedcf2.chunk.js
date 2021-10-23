@@ -1,0 +1,2 @@
+(this.webpackJsonpinstagram=this.webpackJsonpinstagram||[]).push([[11],{117:function(n,s,t){"use strict";t.r(s),t.d(s,"default",(function(){return i}));t(0);var e=t(3);function i(){return Object(e.jsx)("div",{children:"Messages"})}}}]);
+//# sourceMappingURL=11.e3dedcf2.chunk.js.map
