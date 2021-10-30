@@ -5,7 +5,7 @@ const apiEndpoint = apiUrl + "/post";
 
 export const postByUsername = async (files, title, caption, username, paid, price, progress) => {
     try {
-        const { data } = await axios.post(`${apiEndpoint}/${username}`,
+        const { data } = await axios.post(`${apiEndpoint}/add-material/${username}`,
             { files, title, caption, paid, price }, progress);
         return { data };
     } catch (err) {
@@ -96,9 +96,11 @@ export const getReviewByMaterialId = async (materialId) => {
     }
 }
 
-export const retrivePostByUserId = async (userId) => {
+export const checkPurchased = async (userId, materialId) => {
     try {
-        const response = await axios.get(`${apiEndpoint}/userId/${userId}`);
+        const response = await axios.post(`${apiEndpoint}/check-purchased`, {
+            userId, materialId
+        });
         return response.data;
     } catch (err) {
         throw new Error(err.response.data.error);

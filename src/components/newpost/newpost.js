@@ -1,20 +1,18 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { useHistory } from "react-router-dom";
+import ReactDOM from "react-dom";
 import { faImage, faLock } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
-import UploadPreview from './uploadPreview'
 import LoggedInUserContext from '../../context/logged-in-user'
-import usePhotos from '../../hooks/use-photos'
-import { DASHBOARD, MYMATERIAL } from '../../constants/routes'
+import { BOOKSHELL } from '../../constants/routes'
 import { postByUsername } from '../../services/postServices';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import Toggleswitch from '../toggleswitch';
 
 export default function Newpost() {
     const { user: loggedInUser } = useContext(LoggedInUserContext);
-    const { setPosts } = usePhotos()
     const [selectedFiles, setSelectedFiles] = useState()
     const [fileurl, setfileurl] = useState('')
     const [files, setFiles] = useState([])
@@ -23,6 +21,7 @@ export default function Newpost() {
     const [title, setTitle] = useState("")
     const [price, setPrice] = useState()
     let [result, setResult] = useState();
+    let [progress, setProgress] = useState();
     let history = useHistory()
 
     const handleFileUpload = (e) => {
@@ -52,25 +51,30 @@ export default function Newpost() {
         setPaid(!paid)
     }
 
-    const progress = {
+    const progressfn = {
         onUploadProgress: (progressEvent) => {
             let progressper = Math.round(progressEvent.loaded / progressEvent.total * 100) + "%";
             console.log(progressper);
+            setProgress(progressper)
         }
     }
 
     const handleSubmit = async () => {
         try {
-            const { data } = await postByUsername(files, title, caption, loggedInUser.username, paid, price, progress)
+            const { data } = await postByUsername(files, title, caption, loggedInUser.username, paid, price, progressfn)
             // const res = await postByUsername(formData, loggedInUser.username)
-            setPosts(data)
-            history.push(MYMATERIAL)
+
+            history.push(BOOKSHELL)
         } catch (error) {
             console.log(error.response);
         }
     }
 
-    console.log(paid);
+    const progressUpdate = {
+        width: progress,
+    }
+
+    console.log(progress);
     return (
         <>
             <div className="newpost__head">
@@ -83,7 +87,7 @@ export default function Newpost() {
             </div>
             <div className="newpost__main">
                 <input className="newpost__input-text" type="text" placeholder="Title" onChange={handleTitle} />
-                <textarea className="newpost__input-text" placeholder="Disciption..." onChange={handleCaption} />
+                <textarea className="newpost__input-text" placeholder="Description..." onChange={handleCaption} />
                 <label className="newpost__media">
                     <FontAwesomeIcon icon={faImage} />
                     <input type="file" style={{ opacity: 0, position: "absolute", left: "-99999px" }} onChange={handleFileUpload} />
@@ -119,6 +123,24 @@ export default function Newpost() {
                     </div>
                 )}
             </div>
+
+            {progress &&
+                ReactDOM.createPortal(
+                    <>
+                        <div className="modal-layout" ></div>
+                        <div className="modal-box">
+                            <div className="modal-box__heading heading-black">{progress}</div>
+                            <div className="progress-bar">
+                                <div className="progress-bar__container">
+                                    <div style={progressUpdate} className="progress-bar-stick">
+                                        <span className="progress-bar__text">Uploaded Successfully!</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </>,
+                    document.getElementById("modal")
+                )}
         </>
     )
 }
