@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { apiUrl } from "../config.json";
 
-const apiEndpoint = apiUrl + "/post";
+// const apiEndpoint = apiUrl + "/post";
+const apiEndpoint = process.env.apiUrl + "/post";
 
 export const postByUsername = async (files, title, caption, username, paid, price, progress) => {
     try {

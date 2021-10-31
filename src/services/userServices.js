@@ -2,7 +2,9 @@ import axios from 'axios';
 import { apiUrl } from "../config.json";
 import jwtDecode from 'jwt-decode';
 
-const apiEndpoint = apiUrl + "/user";
+// const apiEndpoint = apiUrl + "/user";
+const apiEndpoint = process.env.apiUrl + "/user";
+
 const tokenKey = "token"
 
 export const getUserByUsername = async (usernameOrEmail) => {
